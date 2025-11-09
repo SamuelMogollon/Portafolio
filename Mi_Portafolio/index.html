@@ -74,7 +74,10 @@
             <a href="https://github.com/SamuelMogollon" target="_blank">🐙 GitHub</a>
         </div>
     </section>
-
+    <section id="projects" class="projects-section">
+        <h2>🚀 Últimos Repositorios</h2>
+        <div id="repos" class="repos-container">Cargando proyectos...</div>
+    </section>
     <footer>
         <p>© 2025 Samuel Mogollón — Desarrollador de Software</p>
     </footer>
@@ -93,6 +96,32 @@
         }, appearOptions);
 
         faders.forEach(fader => appearOnScroll.observe(fader));
+    </script>
+    <script>
+        // Cambia el nombre de usuario si usas otro
+        const username = "SamuelMogollon";
+
+        fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
+            .then(res => res.json())
+            .then(repos => {
+                const container = document.getElementById("repos");
+                container.innerHTML = "";
+
+                repos.forEach(repo => {
+                    const repoCard = document.createElement("div");
+                    repoCard.classList.add("repo-card");
+                    repoCard.innerHTML = `
+            <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+            <p>${repo.description || "Sin descripción"}</p>
+            <span>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</span>
+          `;
+                    container.appendChild(repoCard);
+                });
+            })
+            .catch(err => {
+                document.getElementById("repos").innerText = "Error al cargar los repositorios 😢";
+                console.error(err);
+            });
     </script>
 </body>
 
